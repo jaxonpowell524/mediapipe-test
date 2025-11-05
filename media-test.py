@@ -1,0 +1,51 @@
+import cv2
+import mediapipe as mp
+from mediapipe.tasks import python
+from mediapipe.tasks.python import vision
+
+model_path = 'pose_landmarker_full.task'
+
+BaseOptions = mp.tasks.BaseOptions
+PoseLandmarker = mp.tasks.vision.PoseLandmarker
+PoseLandmarkerOptions = mp.tasks.vision.PoseLandmarkerOptions
+VisionRunningMode = mp.tasks.vision.RunningMode
+
+# Create a pose landmarker instance with the video mode:
+options = PoseLandmarkerOptions(
+    base_options=BaseOptions(model_asset_path=model_path),
+    running_mode=VisionRunningMode.VIDEO)
+
+cap = cv2.VideoCapture('IMG_7083.mp4')
+
+with PoseLandmarker.create_from_options(options) as landmarker:
+  # The landmarker is initialized. Use it here.
+  
+  while cap.isOpened():
+        ret, frame = cap.read()
+        if not ret:
+            break
+
+        # Convert to RGB
+        frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+
+        # Use current timestamp in ms
+        timestamp_ms = int(cap.get(cv2.CAP_PROP_POS_MSEC))
+
+        # Run the pose detection
+        result = landmarker.detect_for_video(frame_rgb, timestamp_ms)
+
+        # Draw results (if any)
+        if result.pose_landmarks:
+            for landmark in result.pose_landmarks[0]:
+                x = int(landmark.x * frame.shape[1])
+                y = int(landmark.y * frame.shape[0])
+                cv2.circle(frame, (x, y), 3, (0, 255, 0), -1)
+
+        cv2.imshow('Pose Detection', frame)
+        if cv2.waitKey(1) & 0xFF == 27:  # ESC to exit
+            break
+
+landmarks = [(lm.x, lm.y, lm.z) for lm in result.pose_landmarks[0]]
+
+cap.release()
+cv2.destroyAllWindows()
