@@ -19,9 +19,13 @@ options = PoseLandmarkerOptions(
     base_options=BaseOptions(model_asset_path=model_path),
     running_mode=VisionRunningMode.VIDEO)
 
-cap = cv2.VideoCapture('IMG_7083.mp4')
+video_path_no_format = 'IMG_7083 (1)'
 
-csv_file = open("landmarks.csv", mode="w", newline="")
+cap = cv2.VideoCapture(video_path_no_format + '.mp4')
+
+landmarks_filepath = "landmarks-" + video_path_no_format + ".csv"
+
+csv_file = open(landmarks_filepath, mode="w", newline="")
 csv_writer = csv.writer(csv_file)
 
 # header (frame index + 33 landmarks × 4 values)
