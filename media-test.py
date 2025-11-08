@@ -31,8 +31,10 @@ with PoseLandmarker.create_from_options(options) as landmarker:
         # Use current timestamp in ms
         timestamp_ms = int(cap.get(cv2.CAP_PROP_POS_MSEC))
 
+        mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=frame_rgb)
+
         # Run the pose detection
-        result = landmarker.detect_for_video(frame_rgb, timestamp_ms)
+        result = landmarker.detect_for_video(mp_image, timestamp_ms)
 
         # Draw results (if any)
         if result.pose_landmarks:
