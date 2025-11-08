@@ -2,6 +2,9 @@ import cv2
 import mediapipe as mp
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
+import os
+
+os.environ["QT_QPA_PLATFORM"] = "offscreen"
 
 model_path = 'pose_landmarker_full.task'
 
@@ -43,11 +46,11 @@ with PoseLandmarker.create_from_options(options) as landmarker:
                 y = int(landmark.y * frame.shape[0])
                 cv2.circle(frame, (x, y), 3, (0, 255, 0), -1)
 
-        cv2.imshow('Pose Detection', frame)
+        #cv2.imshow('Pose Detection', frame)
         if cv2.waitKey(1) & 0xFF == 27:  # ESC to exit
             break
 
 landmarks = [(lm.x, lm.y, lm.z) for lm in result.pose_landmarks[0]]
 
 cap.release()
-cv2.destroyAllWindows()
+#cv2.destroyAllWindows()
