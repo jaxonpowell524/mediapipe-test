@@ -3,6 +3,7 @@ import mediapipe as mp
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
 import os
+import csv
 
 os.environ["QT_QPA_PLATFORM"] = "offscreen"
 
@@ -19,6 +20,17 @@ options = PoseLandmarkerOptions(
     running_mode=VisionRunningMode.VIDEO)
 
 cap = cv2.VideoCapture('IMG_7083.mp4')
+
+csv_file = open("landmarks.csv", mode="w", newline="")
+csv_writer = csv.writer(csv_file)
+
+# header (frame index + 33 landmarks × 4 values)
+header = ["frame"]
+for i in range(33):
+    header += [f"x{i}", f"y{i}", f"z{i}", f"vis{i}"]
+csv_writer.writerow(header)
+
+frame_idx = 0
 
 with PoseLandmarker.create_from_options(options) as landmarker:
   # The landmarker is initialized. Use it here.
@@ -46,6 +58,13 @@ with PoseLandmarker.create_from_options(options) as landmarker:
                 y = int(landmark.y * frame.shape[0])
                 cv2.circle(frame, (x, y), 3, (0, 255, 0), -1)
 
+                row = [frame_idx]
+                for lm in result.pose_landmarks[0]:
+                    row += [lm.x, lm.y, lm.z, lm.visibility]
+                csv_writer.writerow(row)
+
+            frame_idx += 1
+
         #cv2.imshow('Pose Detection', frame)
         if cv2.waitKey(1) & 0xFF == 27:  # ESC to exit
             break
@@ -53,4 +72,5 @@ with PoseLandmarker.create_from_options(options) as landmarker:
 landmarks = [(lm.x, lm.y, lm.z) for lm in result.pose_landmarks[0]]
 
 cap.release()
+csv_file.close()
 #cv2.destroyAllWindows()
