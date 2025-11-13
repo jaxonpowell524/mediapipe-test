@@ -29,6 +29,8 @@ csvPath = Path("landmark_csv/" + csv.name + "-landmarks.csv")
 
 mp4Path = str(mp4Path)
 csvPath = str(csvPath)
+print(mp4Path)
+print(csvPath)
 
 cap = cv2.VideoCapture(mp4Path)
 landmarks_filepath = csvPath
