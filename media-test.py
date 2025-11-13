@@ -25,7 +25,7 @@ video_filepath = 'preprocessed_mp4_videos/IMG_7086.MP4'
 
 mp4Path = Path(video_filepath)
 csvPath = mp4Path.with_suffix("")
-csvPath = Path("landmark_csv/" + csv.name + "-landmarks.csv")
+csvPath = Path("landmark_csv/" + csvPath.name + "-landmarks.csv")
 
 mp4Path = str(mp4Path)
 csvPath = str(csvPath)
