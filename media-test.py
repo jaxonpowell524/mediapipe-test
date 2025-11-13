@@ -2,6 +2,7 @@ import cv2
 import mediapipe as mp
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
+from pathlib import Path
 import os
 import csv
 
@@ -19,11 +20,16 @@ options = PoseLandmarkerOptions(
     base_options=BaseOptions(model_asset_path=model_path),
     running_mode=VisionRunningMode.VIDEO)
 
+video_filepath = 'preprocessed_mp4_videos/IMG_7086.MP4'
+mp4Path = Path(video_filepath)
+justPath = Path(*mp4Path.parts[:1])
+print(justPath)
+
 video_path_no_format = 'IMG_7083 (1)'
 
 cap = cv2.VideoCapture(video_path_no_format + '.mp4')
 
-landmarks_filepath = "landmarks-" + video_path_no_format + ".csv"
+landmarks_filepath = "landmark_csv/" + video_path_no_format + "-landmarks.csv"
 
 csv_file = open(landmarks_filepath, mode="w", newline="")
 csv_writer = csv.writer(csv_file)
