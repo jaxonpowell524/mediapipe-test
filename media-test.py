@@ -20,7 +20,7 @@ options = PoseLandmarkerOptions(
     base_options=BaseOptions(model_asset_path=model_path),
     running_mode=VisionRunningMode.VIDEO)
 
-video_filepath = 'preprocessed_mp4_videos/IMG_7086.MP4'
+video_filepath = 'preprocessed_mp4_videos/IMG_7086.mp4'
 
 
 mp4Path = Path(video_filepath)
